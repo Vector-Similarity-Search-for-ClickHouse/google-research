@@ -1,9 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
+project(ProjectName)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
+set(CMAKE_CXX_STANDARD 17)
 
 add_compile_options(-mssse3 -msse4)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
+
+# abslei 
+# set(ABSL_PROPAGATE_CXX_STD ON)
+# add_subdirectory(abseil-cpp)
+
 
 # gtest 
 include(FetchContent)
@@ -15,19 +23,42 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 # protobuf
-INCLUDE(FindProtobuf)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
-find_package(Protobuf REQUIRED)
+# cmake .. -DENABLE_PROTOBUF=OFF -DENABLE_HDFS=OFF -DENABLE_HIVE=OFF
 
-# abslei 
-# set(ABSL_PROPAGATE_CXX_STD ON)
-# add_subdirectory(abseil-cpp)
+INCLUDE(FindProtobuf)
+#set(Protobuf_PROTOC_EXECUTABLE protobuf-install/bin/protoc)
+set(CMAKE_PREFIX_PATH protobuf-install)
+find_package(Protobuf REQUIRED)
+message("${Protobuf_FOUND}")
+message("${Protobuf_VERSION}")
+message("${Protobuf_LIBRARIES}")
+message("${Protobuf_INCLUDE_DIRS}")
+message("${Protobuf_IMPORT_DIRS}")
+message("${Protobuf_PROTOC_EXECUTABLE}")
+#message(${protobuf::protoc})
+#set(protobuf::protoc protobuf-install/bin/protoc)
+#set(Protobuf_LIBRARIES protobuf-install/lib/libprotobuf.a)
+#set(Protobuf_INCLUDE_DIRS protobuf-install/include)
+set(Protobuf_PROTOC_EXECUTABLE ${CMAKE_CURRENT_SOURCE_DIR}/protobuf-install/bin/protoc)
+#set(Protobuf_INCLUDE_DIRS protobuf-install/include) #${CMAKE_SOURCE_DIR}/contrib/protobuf/src)
+set(Protobuf_IMPORT_DIRS 
+#protobuf-install/include
+#${CMAKE_SOURCE_DIR}/contrib/protobuf/src
+${CMAKE_CURRENT_SOURCE_DIR}/scann/proto
+${CMAKE_CURRENT_SOURCE_DIR}/scann/coscann
+${CMAKE_CURRENT_SOURCE_DIR}/scann/trees/kmeans_tree
+${CMAKE_CURRENT_SOURCE_DIR}/scann/partitioning
+${CMAKE_CURRENT_SOURCE_DIR}/scann/data_format
+)
+
+set(Protobuf_Tensorflow_INLUDE_DIRS protobuf-install/include)
 
 # eigen3
-set(Eigen3_DIR /home/nikita/Downloads/eigen-3.4.0/cmake)
+set(Eigen3_DIR eigen-3.4.0/cmake)
 find_package(Eigen3 REQUIRED)
 
 # TensorFlow
+
 find_package(TensorFlow REQUIRED)
 
 
@@ -80,6 +111,14 @@ scann/trees/kmeans_tree/kmeans_tree.proto)
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SOURCES})
 
 add_library(cc_proto ${PROTO_SRCS} ${PROTO_HDRS})
+target_include_directories(cc_proto PUBLIC
+${CMAKE_CURRENT_BINARY_DIR}/scann/proto
+${CMAKE_CURRENT_BINARY_DIR}/scann/coscann
+${CMAKE_CURRENT_BINARY_DIR}/scann/trees/kmeans_tree
+${CMAKE_CURRENT_BINARY_DIR}/scann/partitioning
+${CMAKE_CURRENT_BINARY_DIR}/scann/data_format
+${Protobuf_INCLUDE_DIRS}
+)
 
 
 add_subdirectory(scann_api/scann)

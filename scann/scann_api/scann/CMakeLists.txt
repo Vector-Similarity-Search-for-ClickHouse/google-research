@@ -6,5 +6,5 @@ scann_ops_pybind.cpp
 dataset.hpp
 )
 
-target_link_libraries(scann_interface PUBLIC scann_ops_cc_scann)
-target_include_directories(scann_interface PUBLIC ${SCANN_COMMON_INCLUDE_DIRS})
+target_link_libraries(scann_interface PRIVATE scann_ops_cc_scann)
+target_include_directories(scann_interface PRIVATE ${SCANN_COMMON_INCLUDE_DIRS})
