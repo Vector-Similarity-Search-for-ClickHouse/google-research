@@ -1,5 +1,5 @@
 
-add_library(scann_ops_cc_scann SHARED scann.cc scann.h )
+add_library(scann_ops_cc_scann STATIC   scann.cc scann.h )
 
 set(SOURCES
 base_search_parameters

@@ -22,7 +22,7 @@ utils_intrinsics_simd
 target_link_libraries(utils_intrinsics_horizontal_sum INTERFACE ${SOURCES})
  
 
-add_library(utils_intrinsics_flags SHARED flags.cc flags.h )
+add_library(utils_intrinsics_flags STATIC   flags.cc flags.h )
 
 set(SOURCES
 oss_wrappers_scann_aligned_malloc

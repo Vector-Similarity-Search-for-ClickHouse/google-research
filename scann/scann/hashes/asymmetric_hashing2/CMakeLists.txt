@@ -1,4 +1,4 @@
-add_library(hashes_asymmetric_hashing2_training_options_base SHARED 
+add_library(hashes_asymmetric_hashing2_training_options_base STATIC   
 training_options_base.cc 
 training_options_base.h)
 
@@ -14,7 +14,7 @@ utils_types
 target_link_libraries(hashes_asymmetric_hashing2_training_options_base PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_training_options SHARED training_options.cc training_options.h )
+add_library(hashes_asymmetric_hashing2_training_options STATIC   training_options.cc training_options.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_training_options_base
@@ -30,7 +30,7 @@ utils_types
 target_link_libraries(hashes_asymmetric_hashing2_training_options PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_training_model SHARED training_model.cc training_model.h )
+add_library(hashes_asymmetric_hashing2_training_model STATIC   training_model.cc training_model.h )
 
 set(SOURCES
 data_format_datapoint
@@ -63,7 +63,7 @@ absl::flags
 target_link_libraries(hashes_asymmetric_hashing2_training INTERFACE ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_indexing SHARED indexing.cc indexing.h )
+add_library(hashes_asymmetric_hashing2_indexing STATIC   indexing.cc indexing.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_training_model
@@ -89,7 +89,7 @@ absl::core_headers
 target_link_libraries(hashes_asymmetric_hashing2_indexing PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_querying SHARED querying.cc querying.h )
+add_library(hashes_asymmetric_hashing2_querying STATIC   querying.cc querying.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_training
@@ -116,7 +116,7 @@ absl::flags
 target_link_libraries(hashes_asymmetric_hashing2_querying PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_searcher SHARED searcher.cc searcher.h )
+add_library(hashes_asymmetric_hashing2_searcher STATIC   searcher.cc searcher.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_indexing

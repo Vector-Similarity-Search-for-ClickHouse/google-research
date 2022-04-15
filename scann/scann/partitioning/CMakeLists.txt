@@ -1,5 +1,5 @@
 
-add_library(partitioning_partitioner_base SHARED partitioner_base.cc partitioner_base.h )
+add_library(partitioning_partitioner_base STATIC   partitioner_base.cc partitioner_base.h )
 
 set(SOURCES
 cc_proto
@@ -33,7 +33,7 @@ utils_types
 target_link_libraries(partitioning_kmeans_tree_like_partitioner INTERFACE ${SOURCES})
  
 
-add_library(partitioning_kmeans_tree_partitioner SHARED 
+add_library(partitioning_kmeans_tree_partitioner STATIC   
 kmeans_tree_partitioner.cc 
 kmeans_tree_partitioner_helper.cc 
 kmeans_tree_partitioner.h )
@@ -85,7 +85,7 @@ absl::synchronization
 target_link_libraries(partitioning_kmeans_tree_partitioner_utils INTERFACE ${SOURCES})
  
 
-add_library(partitioning_projecting_decorator SHARED projecting_decorator.cc projecting_decorator.h )
+add_library(partitioning_projecting_decorator STATIC   projecting_decorator.cc projecting_decorator.h )
 
 set(SOURCES
 partitioning_kmeans_tree_like_partitioner
@@ -100,7 +100,7 @@ absl::memory
 target_link_libraries(partitioning_projecting_decorator PUBLIC ${SOURCES})
  
 
-add_library(partitioning_partitioner_factory_base SHARED 
+add_library(partitioning_partitioner_factory_base STATIC   
 partitioner_factory_base.cc 
 partitioner_factory_base.h )
 
@@ -125,7 +125,7 @@ absl::time
 target_link_libraries(partitioning_partitioner_factory_base PUBLIC ${SOURCES})
  
 
-add_library(partitioning_partitioner_factory SHARED partitioner_factory.cc partitioner_factory.h )
+add_library(partitioning_partitioner_factory STATIC   partitioner_factory.cc partitioner_factory.h )
 
 set(SOURCES
 partitioning_kmeans_tree_partitioner_utils

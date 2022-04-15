@@ -14,7 +14,7 @@ utils_types
 target_link_libraries(data_format_gfv_conversion INTERFACE ${SOURCES})
 
 
-add_library(data_format_datapoint SHARED datapoint.cc datapoint.h)
+add_library(data_format_datapoint STATIC   datapoint.cc datapoint.h)
 
 set(SOURCES
 cc_proto
@@ -32,7 +32,7 @@ target_link_libraries(data_format_datapoint PUBLIC ${SOURCES})
 
 
 
-add_library(data_format_dataset SHARED dataset.cc dataset.h)
+add_library(data_format_dataset STATIC   dataset.cc dataset.h)
 
 set(SOURCES
 data_format_datapoint
@@ -76,7 +76,7 @@ absl::strings
 target_link_libraries(data_format_docid_collection_interface INTERFACE ${SOURCES})
 
 
-add_library(data_format_docid_collection SHARED docid_collection.cc docid_collection.h)
+add_library(data_format_docid_collection STATIC   docid_collection.cc docid_collection.h)
 
 set(SOURCES
 data_format_docid_collection_interface
@@ -101,7 +101,7 @@ absl::time
 target_link_libraries(data_format_docid_collection PUBLIC ${SOURCES})
 
 
-add_library(data_format_gfv_properties SHARED gfv_properties.cc gfv_properties.h)
+add_library(data_format_gfv_properties STATIC   gfv_properties.cc gfv_properties.h)
 
 set(SOURCES
 cc_proto

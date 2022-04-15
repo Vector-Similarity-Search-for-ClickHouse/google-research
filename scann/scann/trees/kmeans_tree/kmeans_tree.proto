@@ -16,7 +16,7 @@ syntax = "proto2";
 
 package research_scann;
 
-import "partitioning.proto";
+import "scann/proto/partitioning.proto";
 
 message SerializedKMeansTree {
   message Center {

@@ -1,4 +1,4 @@
-add_library(distance_measures_one_to_many SHARED one_to_many.cc one_to_many.h one_to_many_impl.inc)
+add_library(distance_measures_one_to_many STATIC   one_to_many.cc one_to_many.h one_to_many_impl.inc)
 
 set(SOURCES
 data_format_datapoint

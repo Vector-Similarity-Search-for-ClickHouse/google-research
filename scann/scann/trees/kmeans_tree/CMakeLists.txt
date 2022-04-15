@@ -1,4 +1,4 @@
-add_library(trees_kmeans_tree SHARED 
+add_library(trees_kmeans_tree STATIC   
 kmeans_tree.cc 
 kmeans_tree_node.cc 
 training_options.cc 

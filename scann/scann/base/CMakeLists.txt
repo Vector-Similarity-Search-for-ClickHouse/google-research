@@ -1,6 +1,6 @@
 add_subdirectory(internal)
 
-add_library(base_single_machine_factory_scann SHARED single_machine_factory_scann.cc single_machine_factory_scann.h)
+add_library(base_single_machine_factory_scann STATIC   single_machine_factory_scann.cc single_machine_factory_scann.h)
 
 set(SOURCES
 base_reordering_helper_factory
@@ -35,7 +35,7 @@ absl::memory
 
 target_link_libraries(base_single_machine_factory_scann PUBLIC ${SOURCES})
 
-add_library(base_reordering_helper_factory SHARED reordering_helper_factory.cc reordering_helper_factory.h)
+add_library(base_reordering_helper_factory STATIC   reordering_helper_factory.cc reordering_helper_factory.h)
 
 set(SOURCES
 base_single_machine_factory_options
@@ -56,7 +56,7 @@ absl::flags
 
 target_link_libraries(base_reordering_helper_factory PUBLIC ${SOURCES})
 
-add_library(base_single_machine_factory_options SHARED single_machine_factory_options.cc single_machine_factory_options.h)
+add_library(base_single_machine_factory_options STATIC   single_machine_factory_options.cc single_machine_factory_options.h)
 
 set(SOURCES
 oss_wrappers_scann_aligned_malloc
@@ -74,7 +74,7 @@ absl::flags
 
 target_link_libraries(base_single_machine_factory_options PUBLIC ${SOURCES})
 
-add_library(base_single_machine_base SHARED single_machine_base.cc single_machine_base.h)
+add_library(base_single_machine_base STATIC   single_machine_base.cc single_machine_base.h)
 
 set(SOURCES
 base_search_parameters
@@ -104,7 +104,7 @@ absl::strings
 
 target_link_libraries(base_single_machine_base PUBLIC ${SOURCES})
 
-add_library(base_search_parameters SHARED search_parameters.cc search_parameters.h)
+add_library(base_search_parameters STATIC   search_parameters.cc search_parameters.h)
 
 set(SOURCES
 base_restrict_allowlist
@@ -116,7 +116,7 @@ utils_types
 
 target_link_libraries(base_search_parameters PUBLIC ${SOURCES})
 
-add_library(base_restrict_allowlist SHARED restrict_allowlist.cc restrict_allowlist.h)
+add_library(base_restrict_allowlist STATIC   restrict_allowlist.cc restrict_allowlist.h)
 
 set(SOURCES
 oss_wrappers_scann_aligned_malloc

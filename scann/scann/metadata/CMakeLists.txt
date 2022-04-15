@@ -1,4 +1,4 @@
-add_library(metadata_metadata_getter SHARED metadata_getter.cc metadata_getter.h)
+add_library(metadata_metadata_getter STATIC   metadata_getter.cc metadata_getter.h)
 
 set(SOURCES
 data_format_datapoint

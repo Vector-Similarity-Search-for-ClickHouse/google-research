@@ -1,4 +1,4 @@
-add_library(data_format_internal_short_string_optimized_string SHARED short_string_optimized_string.h)
+add_library(data_format_internal_short_string_optimized_string STATIC   short_string_optimized_string.h)
 
 set(SOURCES
 oss_wrappers_scann_down_cast

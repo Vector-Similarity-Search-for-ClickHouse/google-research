@@ -16,7 +16,7 @@ syntax = "proto2";
 
 package research_scann;
 
-import "features.proto";
+import "scann/data_format/features.proto";
 
 option cc_enable_arenas = true;
 

@@ -9,9 +9,7 @@ add_compile_options(-mssse3 -msse4)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
 
 # abslei 
-# set(ABSL_PROPAGATE_CXX_STD ON)
-# add_subdirectory(abseil-cpp)
-
+# taken from contrib
 
 # gtest 
 include(FetchContent)
@@ -23,60 +21,28 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 # protobuf
-# cmake .. -DENABLE_PROTOBUF=OFF -DENABLE_HDFS=OFF -DENABLE_HIVE=OFF
+# taken from contrib
 
-INCLUDE(FindProtobuf)
-#set(Protobuf_PROTOC_EXECUTABLE protobuf-install/bin/protoc)
-set(CMAKE_PREFIX_PATH protobuf-install)
-find_package(Protobuf REQUIRED)
-message("${Protobuf_FOUND}")
-message("${Protobuf_VERSION}")
-message("${Protobuf_LIBRARIES}")
-message("${Protobuf_INCLUDE_DIRS}")
-message("${Protobuf_IMPORT_DIRS}")
-message("${Protobuf_PROTOC_EXECUTABLE}")
-#message(${protobuf::protoc})
-#set(protobuf::protoc protobuf-install/bin/protoc)
-#set(Protobuf_LIBRARIES protobuf-install/lib/libprotobuf.a)
-#set(Protobuf_INCLUDE_DIRS protobuf-install/include)
-set(Protobuf_PROTOC_EXECUTABLE ${CMAKE_CURRENT_SOURCE_DIR}/protobuf-install/bin/protoc)
-#set(Protobuf_INCLUDE_DIRS protobuf-install/include) #${CMAKE_SOURCE_DIR}/contrib/protobuf/src)
+set(Protobuf_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/contrib/protobuf/src)
 set(Protobuf_IMPORT_DIRS 
-#protobuf-install/include
-#${CMAKE_SOURCE_DIR}/contrib/protobuf/src
-${CMAKE_CURRENT_SOURCE_DIR}/scann/proto
-${CMAKE_CURRENT_SOURCE_DIR}/scann/coscann
-${CMAKE_CURRENT_SOURCE_DIR}/scann/trees/kmeans_tree
-${CMAKE_CURRENT_SOURCE_DIR}/scann/partitioning
-${CMAKE_CURRENT_SOURCE_DIR}/scann/data_format
+${CMAKE_SOURCE_DIR}/contrib/protobuf/src
+${CMAKE_CURRENT_SOURCE_DIR}
 )
-
-set(Protobuf_Tensorflow_INLUDE_DIRS protobuf-install/include)
 
 # eigen3
 set(Eigen3_DIR eigen-3.4.0/cmake)
 find_package(Eigen3 REQUIRED)
 
 # TensorFlow
-
+# search in root (/usr/local) 
 find_package(TensorFlow REQUIRED)
-
-
-#set(Protobuf_IMPORT_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
-
-set(SCANN_COMMON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 set(SCANN_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/scann_api CACHE PATH "")
 
 set(PROJECT_INCLUDE_DIRS 
 ${CMAKE_CURRENT_SOURCE_DIR}
 ${CMAKE_CURRENT_BINARY_DIR}
-#${CMAKE_CURRENT_SOURCE_DIR}/abseil-cpp
-#${CMAKE_CURRENT_SOURCE_DIR}/abseil-cpp/absl
-#scann 
-#${EIGEN3_INCLUDE_DIR} 
-#${TensorFlow_INCLUDE_DIRS}  
-#${Protobuf_INCLUDE_DIRS}
+${Protobuf_INCLUDE_DIRS}
 ${gtest_SOURCE_DIR}/include
 ${gtest_SOURCE_DIR}
 )
@@ -89,6 +55,7 @@ scann/data_format/features.proto
 scann/partitioning/linear_projection_tree.proto
 scann/partitioning/partitioner.proto
 scann/partitioning/kmeans_tree_partitioner.proto
+
 scann/proto/scann.proto
 scann/proto/exact_reordering.proto
 scann/proto/brute_force.proto
@@ -105,13 +72,16 @@ scann/proto/incremental_updates.proto
 scann/proto/hashed.proto
 scann/proto/partitioning.proto
 scann/proto/centers.proto
+
 scann/coscann/v2_restricts.proto
-scann/trees/kmeans_tree/kmeans_tree.proto)
+scann/trees/kmeans_tree/kmeans_tree.proto
+)
 
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SOURCES})
 
 add_library(cc_proto ${PROTO_SRCS} ${PROTO_HDRS})
 target_include_directories(cc_proto PUBLIC
+${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_CURRENT_BINARY_DIR}/scann/proto
 ${CMAKE_CURRENT_BINARY_DIR}/scann/coscann
 ${CMAKE_CURRENT_BINARY_DIR}/scann/trees/kmeans_tree
@@ -123,5 +93,4 @@ ${Protobuf_INCLUDE_DIRS}
 
 add_subdirectory(scann_api/scann)
 add_subdirectory(scann)
-
 

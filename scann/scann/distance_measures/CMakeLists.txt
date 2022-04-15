@@ -3,7 +3,7 @@ add_subdirectory(one_to_many)
 add_subdirectory(one_to_one)
 
 
-add_library(distance_measures_distance_measure_base SHARED
+add_library(distance_measures_distance_measure_base STATIC  
 distance_measure_base.cc
 distance_measure_base.h )
 
@@ -16,7 +16,7 @@ utils_types
 target_link_libraries(distance_measures_distance_measure_base PUBLIC ${SOURCES})
  
 
-add_library(distance_measures_distance_measures SHARED
+add_library(distance_measures_distance_measures STATIC  
 distance_measure_factory.cc 
 distance_measure_base.h 
 distance_measure_factory.h 

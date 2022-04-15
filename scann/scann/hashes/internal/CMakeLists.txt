@@ -23,7 +23,7 @@ absl::flags
 target_link_libraries(hashes_internal_asymmetric_hashing_impl_omit_frame_pointer PUBLIC ${SOURCES})
  
 
-add_library(hashes_internal_asymmetric_hashing_impl SHARED 
+add_library(hashes_internal_asymmetric_hashing_impl STATIC   
 asymmetric_hashing_impl.cc 
 asymmetric_hashing_impl.h )
 
@@ -57,7 +57,7 @@ absl::random_distributions
 target_link_libraries(hashes_internal_asymmetric_hashing_impl PUBLIC ${SOURCES})
  
 
-add_library(hashes_internal_lut16_sse4 SHARED 
+add_library(hashes_internal_lut16_sse4 STATIC   
 lut16_sse4.h
 lut16_sse4.inc
 lut16_sse4.tpl.cc)
@@ -76,7 +76,7 @@ utils_intrinsics_sse4
 target_link_libraries(hashes_internal_lut16_sse4 PUBLIC ${SOURCES})
  
 
-add_library(hashes_internal_lut16_avx2 SHARED 
+add_library(hashes_internal_lut16_avx2 STATIC   
 lut16_avx2.h
 lut16_avx2.inc
 lut16_avx2.tpl.cc)
@@ -95,7 +95,7 @@ utils_intrinsics_avx2
 target_link_libraries(hashes_internal_lut16_avx2 PUBLIC ${SOURCES})
  
 
-add_library(hashes_internal_lut16_avx512 SHARED 
+add_library(hashes_internal_lut16_avx512 STATIC   
 lut16_avx512_swizzle.cc
 lut16_avx512.h 
 lut16_avx512_swizzle.h
@@ -123,7 +123,7 @@ absl::flags
 target_link_libraries(hashes_internal_lut16_avx512 PUBLIC ${SOURCES})
  
 
-add_library(hashes_internal_write_distances_to_topn SHARED 
+add_library(hashes_internal_write_distances_to_topn STATIC   
 write_distances_to_topn.cc 
 write_distances_to_topn.h )
 
@@ -179,7 +179,7 @@ utils_types
 target_link_libraries(hashes_internal_lut16_args INTERFACE ${SOURCES})
  
 
-add_library(hashes_internal_lut16_interface SHARED
+add_library(hashes_internal_lut16_interface STATIC  
 lut16_interface.cc lut16_interface.h )
 
 set(SOURCES
@@ -197,7 +197,7 @@ utils_intrinsics_flags
 target_link_libraries(hashes_internal_lut16_interface PUBLIC ${SOURCES})
  
 
-add_library(hashes_internal_stacked_quantizers SHARED stacked_quantizers.cc stacked_quantizers.h )
+add_library(hashes_internal_stacked_quantizers STATIC   stacked_quantizers.cc stacked_quantizers.h )
 
 set(SOURCES
 data_format_datapoint
