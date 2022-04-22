@@ -3,6 +3,8 @@
 
 #include <cstdio>
 
+namespace scann {
+
 ScannBuilder::ScannBuilder(ConstDataSetWrapper<float, 2> db, size_t num_neighbors, std::string distance_measure)
       : db_(std::move(db)),
         num_neighbors_(num_neighbors),
@@ -245,4 +247,6 @@ std::string ScannBuilder::CreateConfig() {
 
 const char* ScannBuilder::BoolToString(bool value) {
   return value ? "True" : "False";
+}
+
 }

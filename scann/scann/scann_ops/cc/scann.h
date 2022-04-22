@@ -63,6 +63,13 @@ class ScannInterface {
                                MutableSpan<NNResultsVector> res, int final_nn,
                                int pre_reorder_nn, int leaves) const;
   Status Serialize(std::string path);
+
+  template <typename Writer> 
+  Status Serialize(Writer& writer);
+
+  template <typename Reader>
+  Status Deserialize(Reader& reader);
+
   StatusOr<SingleMachineFactoryOptions> ExtractOptions();
 
   template <typename T_idx>

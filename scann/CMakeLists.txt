@@ -39,7 +39,7 @@ find_package(TensorFlow REQUIRED)
 
 set(SCANN_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/scann_api CACHE PATH "")
 
-set(PROJECT_INCLUDE_DIRS 
+set(INCLUDE_DIRS 
 ${CMAKE_CURRENT_SOURCE_DIR}
 ${CMAKE_CURRENT_BINARY_DIR}
 ${Protobuf_INCLUDE_DIRS}
@@ -47,7 +47,7 @@ ${gtest_SOURCE_DIR}/include
 ${gtest_SOURCE_DIR}
 )
 
-include_directories(${PROJECT_INCLUDE_DIRS})
+include_directories(${INCLUDE_DIRS})
 
 
 set(PROTO_SOURCES

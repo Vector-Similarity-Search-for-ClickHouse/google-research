@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "scann_ops_pybind.hpp"
+#include "scann_searcher.hpp"
 #include "dataset.hpp"
 
 // template <typename T>
@@ -45,8 +45,12 @@ struct ReoederArgs {
 };
 }  // namespace detail
 
+namespace scann {
+
+
 class ScannBuilder {
  public:
+  // distance_measure in ["dot_product", "squared_l2"] 
   ScannBuilder(ConstDataSetWrapper<float, 2> db, size_t num_neighbors, std::string distance_measure);
 
   void SetNTrainingThreads(int threads);
@@ -96,3 +100,5 @@ class ScannBuilder {
   std::optional<detail::ScoreBruteForceArgs> score_brute_force_args_;
   std::optional<detail::ReoederArgs> reorder_args_;
 };
+
+}
