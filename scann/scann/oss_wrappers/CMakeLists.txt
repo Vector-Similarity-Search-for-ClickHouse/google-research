@@ -2,6 +2,7 @@ add_library(oss_wrappers_tf_dependency INTERFACE )
 
 set(SOURCES
 ${TensorFlow_LIBRARIES}
+# tensorflow
 )
 
 target_link_libraries(oss_wrappers_tf_dependency INTERFACE ${SOURCES})

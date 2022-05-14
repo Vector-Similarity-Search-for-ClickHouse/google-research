@@ -30,6 +30,8 @@
 #include "scann/oss_wrappers/scann_status.h"
 #include "scann/utils/threads.h"
 
+#include "scann_api/scann/io.hpp"
+
 namespace research_scann {
 
 class ScannInterface {
@@ -64,11 +66,10 @@ class ScannInterface {
                                int pre_reorder_nn, int leaves) const;
   Status Serialize(std::string path);
 
-  template <typename Writer> 
-  Status Serialize(Writer& writer);
 
-  template <typename Reader>
-  Status Deserialize(Reader& reader);
+  Status Serialize(scann::IWriter& writer);
+
+  Status Deserialize(scann::IReader& reader);
 
   StatusOr<SingleMachineFactoryOptions> ExtractOptions();
 

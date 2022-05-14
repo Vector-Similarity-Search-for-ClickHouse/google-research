@@ -25,7 +25,7 @@ absl::flags
 absl::synchronization
 )
 
-target_link_libraries(brute_force PUBLIC ${SOURCES} cxx)
+target_link_libraries(brute_force PUBLIC ${SOURCES})
 
 
 add_library(brute_force_scalar_quantized_brute_force STATIC   scalar_quantized_brute_force.cc scalar_quantized_brute_force.h)

@@ -9,13 +9,17 @@ find_path(TensorFlow_INCLUDE_DIR
         tensorflow/cc
         third_party
         HINTS
+        # ./tensorflow/tensorflow
         /usr/local/include/google/tensorflow
-        /usr/include/google/tensorflow)
+        /usr/include/google/tensorflow
+        )
 
 find_library(TensorFlow_LIBRARY NAMES tensorflow_cc
         HINTS
+        # ./tensorflow
         /usr/lib
-        /usr/local/lib)
+        /usr/local/lib
+        )
 
 # set TensorFlow_FOUND
 find_package_handle_standard_args(TensorFlow DEFAULT_MSG TensorFlow_INCLUDE_DIR TensorFlow_LIBRARY)
