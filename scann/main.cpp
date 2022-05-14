@@ -23,10 +23,12 @@ int main() {
   const size_t reordering_num_neighbors = 100;
 
   // searcher =
-  std::move(
+  auto searcher = std::move(
       scann::ScannBuilder(data_set, num_neighbors, distance_measure)
           .Tree(num_leaves, num_leaves_to_search, training_sample_size)
           .ScoreAh(dimension_per_block, anisotropic_quantization_threshold)
           .Reorder(reordering_num_neighbors)
           .Build());
+
+  
 }

@@ -55,7 +55,8 @@ ScannBuilder& ScannBuilder::Reorder(size_t reordering_num_neighbors,
 }
 
 scann::ScannSearcher ScannBuilder::Build() {
-  return {db_, CreateConfig(), training_threads_};
+  auto str = CreateConfig();
+  return std::move(*ScannSearcherCreate(&db_, &str, training_threads_));
 }
 
 std::string ScannBuilder::GenerateTreeConfig(detail::TreeArgs& args) {

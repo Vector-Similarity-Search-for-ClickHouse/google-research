@@ -2,7 +2,7 @@ set(SCANN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(SCANN_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 cmake_minimum_required(VERSION 3.10)
-project(ProjectName)
+project(ScaNN)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -31,10 +31,10 @@ set(Eigen3_DIR eigen-3.4.0/cmake)
 find_package(Eigen3 REQUIRED)
 
 # TensorFlow
-# list(APPEND CMAKE_MODULE_PATH "${SCANN_SOURCE_DIR}/modules")
-# find_package(TensorFlow REQUIRED)
-set(TensorFlow_INCLUDE_DIRS ${SCANN_SOURCE_DIR}/tensorflow/tensorflow)
-set(TensorFlow_LIBRARIES ${SCANN_SOURCE_DIR}/tensorflow/old/libtensorflow_cc.so)
+list(APPEND CMAKE_MODULE_PATH "${SCANN_SOURCE_DIR}/modules")
+find_package(TensorFlow REQUIRED)
+# set(TensorFlow_INCLUDE_DIRS ${SCANN_SOURCE_DIR}/tensorflow/tensorflow)
+# set(TensorFlow_LIBRARIES ${SCANN_SOURCE_DIR}/tensorflow/old/libtensorflow_cc.so)
 
 
 set(INCLUDE_DIRS 
@@ -96,5 +96,5 @@ add_subdirectory(scann)
 set(SCANN_INCLUDE_DIRS ${SCANN_SOURCE_DIR}/scann_api)
 
 add_executable(Main main.cpp)
-target_link_libraries(Main scann_interface)
+target_link_libraries(Main scann_interface ${TensorFlow_LIBRARIES})
 target_include_directories(Main PUBLIC ${SCANN_INCLUDE_DIRS})
