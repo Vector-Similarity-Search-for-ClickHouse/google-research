@@ -2,7 +2,7 @@ add_subdirectory(fixed_point)
 add_subdirectory(internal)
 add_subdirectory(intrinsics)
 
-add_library(utils_alignment STATIC   alignment.cc alignment.h )
+add_library(utils_alignment SHARED alignment.cc alignment.h )
 
 set(SOURCES
 utils_common
@@ -11,11 +11,11 @@ utils_common
 target_link_libraries(utils_alignment PUBLIC ${SOURCES})
  
 
-add_library(utils_types STATIC   types.cc types.h )
+add_library(utils_types SHARED types.cc types.h )
 
 set(SOURCES
 utils_common
-cc_proto
+proto_input_output_cc_proto
 
 absl::core_headers
 absl::flags
@@ -32,14 +32,14 @@ utils_types
 data_format_datapoint
 distance_measures_distance_measures
 oss_wrappers_scann_bits
-cc_proto
+proto_input_output_cc_proto
 utils_intrinsics_flags
 )
 
 target_link_libraries(utils_datapoint_utils INTERFACE ${SOURCES})
  
 
-add_library(utils_fast_top_neighbors STATIC   fast_top_neighbors.cc fast_top_neighbors.h )
+add_library(utils_fast_top_neighbors SHARED fast_top_neighbors.cc fast_top_neighbors.h )
 
 set(SOURCES
 utils_bits
@@ -61,7 +61,7 @@ absl::strings
 target_link_libraries(utils_fast_top_neighbors PUBLIC ${SOURCES})
  
 
-add_library(utils_gmm_utils STATIC   gmm_utils.cc gmm_utils.h )
+add_library(utils_gmm_utils SHARED gmm_utils.cc gmm_utils.h )
 
 set(SOURCES
 utils_common
@@ -86,7 +86,8 @@ oss_wrappers_scann_random
 oss_wrappers_scann_status
 oss_wrappers_scann_threadpool
 oss_wrappers_tf_dependency
-cc_proto
+partitioning_partitioner_cc_proto
+proto_partitioning_cc_proto
 
 absl::base
 absl::endian
@@ -141,7 +142,7 @@ absl::flags
 target_link_libraries(utils_reduction INTERFACE ${SOURCES})
  
 
-add_library(utils_util_functions STATIC   util_functions.cc util_functions.h )
+add_library(utils_util_functions SHARED util_functions.cc util_functions.h )
 
 set(SOURCES
 utils_common
@@ -150,9 +151,13 @@ utils_reduction
 utils_types
 utils_zip_sort
 data_format_datapoint
+data_format_features_cc_proto
 data_format_internal_short_string_optimized_string
 oss_wrappers_tf_dependency
-cc_proto
+partitioning_partitioner_cc_proto
+proto_exact_reordering_cc_proto
+proto_input_output_cc_proto
+proto_results_cc_proto
 
 absl::base
 absl::flat_hash_map
@@ -162,16 +167,28 @@ absl::node_hash_set
 target_link_libraries(utils_util_functions PUBLIC ${SOURCES})
  
 
-add_library(utils_scann_config_utils STATIC   scann_config_utils.cc scann_config_utils.h )
+add_library(utils_scann_config_utils SHARED scann_config_utils.cc scann_config_utils.h )
 
 set(SOURCES
 utils_common
 utils_types
 data_format_datapoint
+data_format_features_cc_proto
 distance_measures_distance_measures
 oss_wrappers_scann_status
 oss_wrappers_tf_dependency
-cc_proto
+partitioning_partitioner_cc_proto
+proto_brute_force_cc_proto
+proto_distance_measure_cc_proto
+proto_exact_reordering_cc_proto
+proto_hash_cc_proto
+proto_incremental_updates_cc_proto
+proto_input_output_cc_proto
+proto_metadata_cc_proto
+proto_partitioning_cc_proto
+proto_projection_cc_proto
+proto_restricts_cc_proto
+proto_scann_cc_proto
 
 absl::core_headers
 absl::strings
@@ -181,7 +198,7 @@ absl::str_format
 target_link_libraries(utils_scann_config_utils PUBLIC ${SOURCES})
  
 
-add_library(utils_threads STATIC   threads.cc threads.h )
+add_library(utils_threads SHARED threads.cc threads.h )
 
 set(SOURCES
 utils_types
@@ -194,7 +211,7 @@ absl::time
 target_link_libraries(utils_threads PUBLIC ${SOURCES})
  
 
-add_library(utils_memory_logging STATIC   memory_logging.cc memory_logging.h )
+add_library(utils_memory_logging SHARED memory_logging.cc memory_logging.h )
 
 set(SOURCES
 utils_types
@@ -223,7 +240,7 @@ oss_wrappers_scann_bits
 target_link_libraries(utils_bit_iterator INTERFACE ${SOURCES})
  
 
-add_library(utils_reordering_helper STATIC   reordering_helper.cc reordering_helper.h )
+add_library(utils_reordering_helper SHARED reordering_helper.cc reordering_helper.h )
 
 set(SOURCES
 utils_common
@@ -255,18 +272,20 @@ absl::str_format
 target_link_libraries(utils_reordering_helper PUBLIC ${SOURCES})
  
 
-add_library(utils_factory_helpers STATIC   factory_helpers.cc factory_helpers.h )
+add_library(utils_factory_helpers SHARED factory_helpers.cc factory_helpers.h )
 
 set(SOURCES
 utils_types
 distance_measures_distance_measures
-cc_proto
+proto_distance_measure_cc_proto
+proto_exact_reordering_cc_proto
+proto_scann_cc_proto
 )
 
 target_link_libraries(utils_factory_helpers PUBLIC ${SOURCES})
  
 
-add_library(utils_hash_leaf_helpers STATIC   hash_leaf_helpers.cc hash_leaf_helpers.h )
+add_library(utils_hash_leaf_helpers SHARED hash_leaf_helpers.cc hash_leaf_helpers.h )
 
 set(SOURCES
 utils_factory_helpers
@@ -279,7 +298,8 @@ hashes_asymmetric_hashing2_searcher
 hashes_asymmetric_hashing2_training
 hashes_asymmetric_hashing2_training_options
 projection_projection_factory
-cc_proto
+proto_centers_cc_proto
+proto_distance_measure_cc_proto
 
 absl::synchronization
 )
@@ -287,7 +307,7 @@ absl::synchronization
 target_link_libraries(utils_hash_leaf_helpers PUBLIC ${SOURCES})
  
 
-add_library(utils_io_oss_wrapper STATIC   io_oss_wrapper.cc io_oss_wrapper.h )
+add_library(utils_io_oss_wrapper SHARED io_oss_wrapper.cc io_oss_wrapper.h )
 
 set(SOURCES
 utils_common
@@ -296,7 +316,7 @@ utils_common
 target_link_libraries(utils_io_oss_wrapper PUBLIC ${SOURCES})
  
 
-add_library(utils_io_npy STATIC   io_npy.cc io_npy.h )
+add_library(utils_io_npy SHARED io_npy.cc io_npy.h )
 
 set(SOURCES
 utils_io_oss_wrapper
@@ -309,11 +329,12 @@ absl::span
 target_link_libraries(utils_io_npy PUBLIC ${SOURCES})
  
 
-add_library(utils_input_data_utils STATIC   input_data_utils.cc input_data_utils.h )
+add_library(utils_input_data_utils SHARED input_data_utils.cc input_data_utils.h )
 
 set(SOURCES
 data_format_dataset
-cc_proto
+proto_hash_cc_proto
+proto_projection_cc_proto
 utils_fixed_point_pre_quantized_fixed_point
 )
 
@@ -332,7 +353,7 @@ oss_wrappers_tf_dependency
 target_link_libraries(utils_zip_sort INTERFACE ${SOURCES})
  
 
-add_library(utils_top_n_amortized_constant STATIC   top_n_amortized_constant.cc top_n_amortized_constant.h )
+add_library(utils_top_n_amortized_constant SHARED top_n_amortized_constant.cc top_n_amortized_constant.h )
 
 set(SOURCES
 utils_types
@@ -398,7 +419,7 @@ utils_types
 target_link_libraries(utils_iterators INTERFACE ${SOURCES})
  
 
-add_library(utils_scalar_quantization_helpers STATIC   scalar_quantization_helpers.cc scalar_quantization_helpers.h )
+add_library(utils_scalar_quantization_helpers SHARED scalar_quantization_helpers.cc scalar_quantization_helpers.h )
 
 set(SOURCES
 utils_common
@@ -415,7 +436,7 @@ data_format_dataset
 target_link_libraries(utils_scalar_quantization_helpers PUBLIC ${SOURCES})
  
 
-add_library(utils_common STATIC   common.cc common.h)
+add_library(utils_common SHARED common.cc common.h)
 
 set(SOURCES
 oss_wrappers_scann_aligned_malloc

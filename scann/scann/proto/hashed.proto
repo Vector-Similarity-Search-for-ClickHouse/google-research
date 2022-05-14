@@ -16,8 +16,6 @@ syntax = "proto2";
 
 package research_scann;
 
-// import "scann/data_format/features.proto";
-
 import "features.proto";
 
 message HashedItem {

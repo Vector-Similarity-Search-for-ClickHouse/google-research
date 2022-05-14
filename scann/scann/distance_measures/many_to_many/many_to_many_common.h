@@ -17,7 +17,6 @@
 
 #include <array>
 #include <atomic>
-#include <cstddef>
 
 #include "absl/base/internal/spinlock.h"
 #include "absl/synchronization/mutex.h"
@@ -129,8 +128,7 @@ class ManyToManyTop1Callback {
       MutableSpan<pair<DatapointIndex, FloatT>> top1_result_by_query)
       : top1_result_by_query_(top1_result_by_query.data()),
         epsilons_(
-            new std::atomic<FloatT>[top1_result_by_query.size()]),
-            ////make_unique<std::atomic<FloatT>[]>(top1_result_by_query.size())),
+            make_unique<std::atomic<FloatT>[]>(top1_result_by_query.size())),
         mutexes_(make_shared<
                  std::array<absl::base_internal::SpinLock, kNumSpinLocks>>()) {
     for (size_t i : IndicesOf(top1_result_by_query)) {
@@ -187,9 +185,8 @@ class ManyToManyTopKCallback {
 
   explicit ManyToManyTopKCallback(MutableSpan<FastTopNeighbors<float>> topns)
       : topns_(topns.data()),
-        epsilons_(new std::atomic<float>[topns.size()]),
+        epsilons_(make_unique<std::atomic<float>[]>(topns.size())),
         mutexes_(make_shared<std::array<absl::Mutex, kNumMutexes>>()) {
-    //epsilons_ = new std::atomic<float>[topns.size()];//std::make_shared<std::atomic<float>[]>(topns.size());
     for (size_t i : IndicesOf(topns)) {
       epsilons_[i].store(topns[i].epsilon(), std::memory_order_relaxed);
     }

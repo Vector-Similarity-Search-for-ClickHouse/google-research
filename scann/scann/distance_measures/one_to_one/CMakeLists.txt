@@ -9,7 +9,7 @@ utils_types
 target_link_libraries(distance_measures_one_to_one_common INTERFACE ${SOURCES})
  
 
-add_library(distance_measures_one_to_one_binary_distance_measure_base STATIC  
+add_library(distance_measures_one_to_one_binary_distance_measure_base SHARED
 binary_distance_measure_base.cc 
 binary_distance_measure_base.h)
 
@@ -127,7 +127,7 @@ utils_types
 target_link_libraries(distance_measures_one_to_one_hamming_distance PUBLIC ${SOURCES})
  
 
-add_library(distance_measures_one_to_one_jaccard_distance STATIC   
+add_library(distance_measures_one_to_one_jaccard_distance SHARED 
 jaccard_distance.cc 
 jaccard_distance.h )
 

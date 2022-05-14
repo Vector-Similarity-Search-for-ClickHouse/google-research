@@ -1,5 +1,6 @@
 add_subdirectory(base)
 add_subdirectory(brute_force)
+add_subdirectory(coscann)
 add_subdirectory(data_format)
 add_subdirectory(distance_measures)
 add_subdirectory(hashes)

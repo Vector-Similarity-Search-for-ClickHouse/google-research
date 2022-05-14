@@ -1,5 +1,5 @@
 
-add_library(scann_ops_cc_scann STATIC   scann.cc scann.h )
+add_library(scann_ops_cc_scann SHARED scann.cc scann.h )
 
 set(SOURCES
 base_search_parameters
@@ -9,7 +9,9 @@ base_single_machine_factory_scann
 data_format_dataset
 oss_wrappers_tf_dependency
 oss_wrappers_scann_status
-cc_proto
+partitioning_partitioner_cc_proto
+proto_brute_force_cc_proto
+proto_centers_cc_proto
 tree_x_hybrid_tree_x_params
 utils_io_npy
 utils_io_oss_wrapper

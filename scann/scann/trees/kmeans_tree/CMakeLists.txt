@@ -1,4 +1,15 @@
-add_library(trees_kmeans_tree STATIC   
+
+# set(PROTO_SOURCES
+# kmeans_tree.proto
+# )
+
+# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SOURCES})
+
+# add_library(tree_kmeans_tree_kmeans_tree_cc_proto SHARED ${PROTO_SRCS} ${PROTO_HDRS})
+# target_link_libraries(tree_kmeans_tree_kmeans_tree_cc_proto ${PROTOBUF_LIBRARIES})
+
+
+add_library(trees_kmeans_tree SHARED 
 kmeans_tree.cc 
 kmeans_tree_node.cc 
 training_options.cc 
@@ -7,7 +18,7 @@ kmeans_tree_node.h
 training_options.h )
 
 set(SOURCES
-cc_proto
+tree_kmeans_tree_kmeans_tree_cc_proto
 data_format_datapoint
 data_format_dataset
 distance_measures_distance_measure_base
@@ -19,6 +30,7 @@ oss_wrappers_scann_down_cast
 oss_wrappers_scann_random
 oss_wrappers_scann_threadpool
 oss_wrappers_tf_dependency
+proto_partitioning_cc_proto
 utils_datapoint_utils
 utils_fast_top_neighbors
 utils_gmm_utils

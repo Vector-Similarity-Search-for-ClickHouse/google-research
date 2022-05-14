@@ -1,4 +1,4 @@
-add_library(brute_force STATIC   brute_force.cc brute_force.h)
+add_library(brute_force SHARED brute_force.cc brute_force.h)
 
 set(SOURCES
 #distance_measures_distance_measure_base
@@ -28,7 +28,7 @@ absl::synchronization
 target_link_libraries(brute_force PUBLIC ${SOURCES})
 
 
-add_library(brute_force_scalar_quantized_brute_force STATIC   scalar_quantized_brute_force.cc scalar_quantized_brute_force.h)
+add_library(brute_force_scalar_quantized_brute_force SHARED scalar_quantized_brute_force.cc scalar_quantized_brute_force.h)
 
 set(SOURCES
 base_restrict_allowlist

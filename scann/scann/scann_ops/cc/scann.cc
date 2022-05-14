@@ -14,28 +14,21 @@
 
 #include "scann/scann_ops/cc/scann.h"
 
-#include <cstddef>
 #include <cstdint>
 #include <fstream>
-#include <memory>
 #include <string>
-#include <vector>
 
 #include "absl/base/internal/sysinfo.h"
 #include "absl/container/flat_hash_set.h"
 #include "absl/container/node_hash_set.h"
-#include "google/protobuf/arena.h"
 #include "partitioner.pb.h"
 #include "brute_force.pb.h"
 #include "centers.pb.h"
-#include "scann.pb.h"
 #include "scann/tree_x_hybrid/tree_x_params.h"
-#include "scann/utils/common.h"
 #include "scann/utils/io_npy.h"
 #include "scann/utils/io_oss_wrapper.h"
 #include "scann/utils/scann_config_utils.h"
 #include "scann/utils/threads.h"
-#include "tensorflow/core/platform/status.h"
 
 namespace research_scann {
 namespace {
@@ -308,221 +301,6 @@ Status ScannInterface::Serialize(std::string path) {
   if (dataset != nullptr)
     SCANN_RETURN_IF_ERROR(DatasetToNumpy(path + "/dataset.npy", *dataset));
   return OkStatus();
-}
-
-namespace writer_detail {
-  //template <typename Writer> 
-  void WriteProtobufToWriter(scann::IWriter& writer, google::protobuf::Message *message) {
-    std::string serialized_message;
-    if(!message->SerializeToString(&serialized_message)) {
-      // return InternalError("Failed to write proto to str");
-    }
-    size_t size = serialized_message.size();
-    writer.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
-    writer.write(serialized_message.data(), size);
-  }
-
-  template <typename T>
-  void SpanToWriter(scann::IWriter& writer, ConstSpan<T> span) {
-    size_t size = span.size();
-    writer.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
-    writer.write(reinterpret_cast<const char*>(span.data()), sizeof(T) * size);
-  }
-
-  template <typename T> 
-  void VectorToWriter(scann::IWriter& writer, const vector<T>& data) {
-    SpanToWriter(writer, ConstSpan<T>(data.data(), data.size()));
-    //SpanToWriter(writer, ConstSpan<size_t>(dim_size.data(), dim_size.size()));  
-  } 
-
-  template <typename T> 
-  void DatasetToWriter(scann::IWriter& writer, const DenseDataset<T>& data) {
-    SpanToWriter(writer, data.data());
-    size_t size = data.size();
-    writer.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
-    //SpanToWriter(writer, ConstSpan<size_t>{data.size()});
-  }
-
-  //template <typename Writer>
-  void WriteZeroSize(scann::IWriter & writer) {
-    size_t size = 0;
-    writer.write(reinterpret_cast<char*>(&size), sizeof(size_t));
-  }
-}  // namespace writer_detail
-
-//template <typename Writer> 
-Status ScannInterface::Serialize(scann::IWriter& writer) {
-  TF_ASSIGN_OR_RETURN(auto opts, scann_->ExtractSingleMachineFactoryOptions());
-
-  writer_detail::WriteProtobufToWriter(writer, &config_);
-  if (opts.ah_codebook != nullptr) 
-    writer_detail::WriteProtobufToWriter(writer, opts.ah_codebook.get());
-  else 
-    writer_detail::WriteZeroSize(writer);
-
-  if (opts.serialized_partitioner != nullptr)
-    writer_detail::WriteProtobufToWriter(writer, opts.serialized_partitioner.get());
-  else 
-    writer_detail::WriteZeroSize(writer);
-
-
-  if (opts.datapoints_by_token != nullptr) {
-    vector<int32_t> datapoint_to_token(n_points_);
-    for (const auto& [token_idx, dps] : Enumerate(*opts.datapoints_by_token))
-      for (auto dp_idx : dps) datapoint_to_token[dp_idx] = token_idx;
-    writer_detail::VectorToWriter(writer, datapoint_to_token);
-  } else 
-    writer_detail::WriteZeroSize(writer);
-
-  if (opts.hashed_dataset != nullptr)
-    writer_detail::DatasetToWriter(writer, *(opts.hashed_dataset));
-  else 
-    writer_detail::WriteZeroSize(writer);
-
-  if (opts.pre_quantized_fixed_point != nullptr) {
-    auto fixed_point = opts.pre_quantized_fixed_point;
-    auto dataset = fixed_point->fixed_point_dataset;
-    if (dataset != nullptr) {
-      writer_detail::DatasetToWriter(writer, *dataset);
-    } else {
-      writer_detail::WriteZeroSize(writer);
-    }
-    auto multipliers = fixed_point->multiplier_by_dimension;
-    if (multipliers != nullptr) {
-      writer_detail::VectorToWriter(writer, *multipliers);
-    } else {
-      writer_detail::WriteZeroSize(writer);
-    }
-    auto norms = fixed_point->squared_l2_norm_by_datapoint;
-    if (norms != nullptr) {
-      writer_detail::VectorToWriter(writer, *norms);
-    } else {
-      writer_detail::WriteZeroSize(writer);
-    }
-  } else {
-    writer_detail::WriteZeroSize(writer);
-    writer_detail::WriteZeroSize(writer);
-    writer_detail::WriteZeroSize(writer);
-  }
-
-  TF_ASSIGN_OR_RETURN(auto dataset, Float32DatasetIfNeeded());
-  if (dataset != nullptr)
-    writer_detail::DatasetToWriter(writer, *dataset);
-  else 
-    writer_detail::WriteZeroSize(writer);
-
-  return OkStatus();  
-}
-
-namespace reader_detail {
-  //template <typename Reader> 
-  bool ReadProtobufFromReader(scann::IReader& reader, google::protobuf::Message *message) {
-    size_t size;
-    reader.read(reinterpret_cast<char*>(&size), sizeof(size_t));
-    if (size != 0) {
-      std::string data(size, '\0');
-      message->ParseFromString(data);
-    }
-    
-    return size != 0;
-  }
-
-  template <typename T>
-  bool SpanFromReader(scann::IReader& reader, std::vector<T>& data) {
-    size_t size;
-    reader.read(reinterpret_cast<char*>(&size), sizeof(size_t));
-    // data.clear();
-    data.reserve(size);
-    reader.read(reinterpret_cast<char*>(data.data()), size * sizeof(T));
-    return size != 0;
-  }
-
-  template <typename T>
-  bool VecFromReader(scann::IReader& reader, std::vector<T>& data) {
-    return SpanFromReader(reader, data);    
-  }
-
-  template <typename T>
-  bool DatasetFromReader(scann::IReader& reader, std::vector<T>& data, size_t& size) {
-    SpanFromReader(reader, data);
-    if (data.empty()) {
-      size = 0;
-    } else {
-      reader.read(reinterpret_cast<char*>(&size), sizeof(size_t));
-    }    
-    return size != 0;
-  }
-
-}  // namespace reader_detail
-
-namespace detail {
-  template <typename T>
-  ConstSpan<T> VecToSpan(std::vector<T>& vec) {
-    return {vec.data(), vec.size()};
-  }
-} // namespace detail
-
-//template <typename Reader>
-Status ScannInterface::Deserialize(scann::IReader& reader) {
-  ScannConfig config;
-  reader_detail::ReadProtobufFromReader(reader, &config);
-
-  SingleMachineFactoryOptions opts;
-  auto ah_codebook = std::make_shared<CentersForAllSubspaces>();
-  if (reader_detail::ReadProtobufFromReader(reader, ah_codebook.get())) {
-    opts.ah_codebook = std::move(ah_codebook);
-  }
-  auto serialized_partitioner = std::make_shared<SerializedPartitioner>();
-  if (reader_detail::ReadProtobufFromReader(reader, serialized_partitioner.get())) {
-    opts.serialized_partitioner = std::move(serialized_partitioner);
-  }
-
-  DatapointIndex n_points = kInvalidDatapointIndex;
-
-  std::vector<int32_t> datapoint_to_token;
-
-  if (reader_detail::VecFromReader(reader, datapoint_to_token)) {
-    n_points = datapoint_to_token.size();
-  }
-
-  std::vector<uint8_t> hashed_dataset;
-  size_t hashed_dataset_size;
-  if (reader_detail::DatasetFromReader(reader, hashed_dataset, hashed_dataset_size)) {
-    n_points = hashed_dataset_size;
-  }
-
-  std::vector<int8_t> int8_dataset;
-  size_t int8_dataset_size;
-  if (reader_detail::DatasetFromReader(reader, int8_dataset, int8_dataset_size)) {
-    n_points = int8_dataset_size;
-  }
-
-  std::vector<float> multiplier;
-
-  if (reader_detail::VecFromReader(reader, multiplier)) {
-    n_points = multiplier.size();
-  }
-
-  std::vector<float> dp_norm; 
-  if (reader_detail::VecFromReader(reader, dp_norm)) {
-    n_points = dp_norm.size();
-  }
-
-  std::vector<float> dataset;
-  size_t dataset_size;
-  if (reader_detail::DatasetFromReader(reader, dataset, dataset_size)) {
-    n_points = dataset_size;
-  }
-
-  return Initialize(config,
-             opts,
-             detail::VecToSpan(dataset),
-             detail::VecToSpan(datapoint_to_token),
-             detail::VecToSpan(hashed_dataset),
-             detail::VecToSpan(int8_dataset),
-             detail::VecToSpan(multiplier),
-             detail::VecToSpan(dp_norm),
-             n_points);
 }
 
 StatusOr<SingleMachineFactoryOptions> ScannInterface::ExtractOptions() {

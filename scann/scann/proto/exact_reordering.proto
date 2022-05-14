@@ -18,8 +18,6 @@ syntax = "proto2";
 
 package research_scann;
 
-//import "scann/proto/distance_measure.proto";
-
 import "distance_measure.proto";
 
 message ExactReordering {

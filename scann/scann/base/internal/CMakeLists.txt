@@ -6,7 +6,8 @@ base_single_machine_base
 base_single_machine_factory_options
 data_format_dataset
 oss_wrappers_tf_dependency
-cc_proto
+proto_crowding_cc_proto
+proto_scann_cc_proto
 utils_factory_helpers
 utils_scann_config_utils
 )

@@ -2,14 +2,12 @@ add_library(oss_wrappers_tf_dependency INTERFACE )
 
 set(SOURCES
 ${TensorFlow_LIBRARIES}
-# tensorflow
 )
 
 target_link_libraries(oss_wrappers_tf_dependency INTERFACE ${SOURCES})
-target_include_directories(oss_wrappers_tf_dependency INTERFACE ${TensorFlow_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${Protobuf_INCLUDE_DIRS})
+ 
 
-
-add_library(oss_wrappers_scann_aligned_malloc STATIC   scann_aligned_malloc.cc scann_aligned_malloc.h )
+add_library(oss_wrappers_scann_aligned_malloc SHARED scann_aligned_malloc.cc scann_aligned_malloc.h )
 
 
 add_library(oss_wrappers_scann_down_cast INTERFACE)
@@ -24,7 +22,7 @@ target_link_libraries(oss_wrappers_scann_down_cast INTERFACE ${SOURCES})
 add_library(oss_wrappers_scann_castops INTERFACE)
 
 
-add_library(oss_wrappers_scann_bits STATIC   scann_bits.cc scann_bits.h )
+add_library(oss_wrappers_scann_bits SHARED scann_bits.cc scann_bits.h )
 
 set(SOURCES
 absl::core_headers
@@ -47,7 +45,7 @@ target_link_libraries(oss_wrappers_scann_malloc_extension INTERFACE ${SOURCES})
 add_library(oss_wrappers_scann_random INTERFACE)
  
 
-add_library(oss_wrappers_scann_status STATIC   scann_status.cc scann_status.h )
+add_library(oss_wrappers_scann_status SHARED scann_status.cc scann_status.h )
 
 set(SOURCES
 oss_wrappers_scann_status_builder
@@ -59,7 +57,7 @@ absl::strings
 target_link_libraries(oss_wrappers_scann_status PUBLIC ${SOURCES})
  
 
-add_library(oss_wrappers_scann_status_builder STATIC   scann_status_builder.cc scann_status_builder.h )
+add_library(oss_wrappers_scann_status_builder SHARED scann_status_builder.cc scann_status_builder.h )
 
 set(SOURCES
 oss_wrappers_tf_dependency
@@ -71,7 +69,7 @@ absl::strings
 target_link_libraries(oss_wrappers_scann_status_builder PUBLIC ${SOURCES})
  
 
-add_library(oss_wrappers_scann_serialize STATIC   scann_serialize.cc scann_serialize.h )
+add_library(oss_wrappers_scann_serialize SHARED scann_serialize.cc scann_serialize.h )
 
 set(SOURCES
 

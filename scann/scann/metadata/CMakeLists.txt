@@ -1,9 +1,9 @@
-add_library(metadata_metadata_getter STATIC   metadata_getter.cc metadata_getter.h)
+add_library(metadata_metadata_getter SHARED metadata_getter.cc metadata_getter.h)
 
 set(SOURCES
 data_format_datapoint
 data_format_dataset
-cc_proto
+data_format_features_cc_proto
 utils_types
 
 absl::status

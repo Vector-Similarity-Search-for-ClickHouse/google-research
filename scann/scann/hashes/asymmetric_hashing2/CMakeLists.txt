@@ -1,4 +1,4 @@
-add_library(hashes_asymmetric_hashing2_training_options_base STATIC   
+add_library(hashes_asymmetric_hashing2_training_options_base SHARED 
 training_options_base.cc 
 training_options_base.h)
 
@@ -7,14 +7,14 @@ data_format_dataset
 distance_measures_distance_measures
 oss_wrappers_scann_threadpool
 projection_chunking_projection
-cc_proto
+proto_hash_cc_proto
 utils_types
 )
 
 target_link_libraries(hashes_asymmetric_hashing2_training_options_base PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_training_options STATIC   training_options.cc training_options.h )
+add_library(hashes_asymmetric_hashing2_training_options SHARED training_options.cc training_options.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_training_options_base
@@ -23,19 +23,21 @@ distance_measures_distance_measures
 oss_wrappers_scann_threadpool
 projection_chunking_projection
 projection_projection_factory
-cc_proto
+proto_hash_cc_proto
+proto_projection_cc_proto
 utils_types
 )
 
 target_link_libraries(hashes_asymmetric_hashing2_training_options PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_training_model STATIC   training_model.cc training_model.h )
+add_library(hashes_asymmetric_hashing2_training_model SHARED training_model.cc training_model.h )
 
 set(SOURCES
 data_format_datapoint
 data_format_dataset
-cc_proto
+proto_centers_cc_proto
+proto_hash_cc_proto
 utils_types
 )
 
@@ -63,7 +65,7 @@ absl::flags
 target_link_libraries(hashes_asymmetric_hashing2_training INTERFACE ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_indexing STATIC   indexing.cc indexing.h )
+add_library(hashes_asymmetric_hashing2_indexing SHARED indexing.cc indexing.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_training_model
@@ -77,7 +79,7 @@ hashes_internal_stacked_quantizers
 oss_wrappers_scann_serialize
 oss_wrappers_tf_dependency
 projection_chunking_projection
-cc_proto
+proto_hash_cc_proto
 utils_common
 utils_reduction
 utils_types
@@ -89,7 +91,7 @@ absl::core_headers
 target_link_libraries(hashes_asymmetric_hashing2_indexing PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_querying STATIC   querying.cc querying.h )
+add_library(hashes_asymmetric_hashing2_querying SHARED querying.cc querying.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_training
@@ -103,7 +105,7 @@ hashes_internal_asymmetric_hashing_impl
 hashes_internal_asymmetric_hashing_lut16
 hashes_internal_asymmetric_hashing_postprocess
 projection_chunking_projection
-cc_proto
+proto_hash_cc_proto
 utils_common
 utils_top_n_amortized_constant
 utils_types
@@ -116,7 +118,7 @@ absl::flags
 target_link_libraries(hashes_asymmetric_hashing2_querying PUBLIC ${SOURCES})
  
 
-add_library(hashes_asymmetric_hashing2_searcher STATIC   searcher.cc searcher.h )
+add_library(hashes_asymmetric_hashing2_searcher SHARED searcher.cc searcher.h )
 
 set(SOURCES
 hashes_asymmetric_hashing2_indexing
@@ -133,7 +135,7 @@ oss_wrappers_scann_aligned_malloc
 oss_wrappers_scann_down_cast
 oss_wrappers_scann_serialize
 oss_wrappers_tf_dependency
-cc_proto
+proto_hash_cc_proto
 tree_x_hybrid_leaf_searcher_optional_parameter_creator
 utils_datapoint_utils
 utils_top_n_amortized_constant
@@ -152,7 +154,8 @@ add_library(hashes_asymmetric_hashing2_serialization INTERFACE)
 set(SOURCES
 data_format_datapoint
 data_format_dataset
-cc_proto
+proto_centers_cc_proto
+proto_hash_cc_proto
 )
 
 target_link_libraries(hashes_asymmetric_hashing2_serialization INTERFACE ${SOURCES})

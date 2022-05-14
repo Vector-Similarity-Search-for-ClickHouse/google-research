@@ -16,8 +16,6 @@ syntax = "proto2";
 
 package research_scann;
 
-// import "scann/trees/kmeans_tree/kmeans_tree.proto";
-
 import "kmeans_tree.proto";
 
 message SerializedKMeansTreePartitioner {

@@ -1,4 +1,4 @@
-add_library(distance_measures_many_to_many STATIC  
+add_library(distance_measures_many_to_many SHARED
 many_to_many_double_results.cc
 many_to_many_double_top1.cc
 many_to_many_float_results.cc
@@ -34,7 +34,7 @@ absl::flags
 target_link_libraries(distance_measures_many_to_many PUBLIC ${SOURCES})
 
 
-add_library(distance_measures_many_to_many_many_to_many_flags STATIC   many_to_many_flags.cc many_to_many_flags.h)
+add_library(distance_measures_many_to_many_many_to_many_flags SHARED many_to_many_flags.cc many_to_many_flags.h)
 
 set(SOURCES
 absl::flags
@@ -49,7 +49,7 @@ add_library(distance_measures_many_to_many_many_to_many_common INTERFACE)
 set(SOURCES
 data_format_datapoint
 data_format_dataset
-distance_measures_distance_measures
+distance_measures
 oss_wrappers_scann_aligned_malloc
 oss_wrappers_scann_down_cast
 oss_wrappers_scann_threadpool
@@ -68,7 +68,7 @@ target_link_libraries(distance_measures_many_to_many_many_to_many_common INTERFA
 
 
 
-add_library(distance_measures_many_to_many_fp8_transposed STATIC   fp8_transposed.cc fp8_transposed.h)
+add_library(distance_measures_many_to_many_fp8_transposed SHARED fp8_transposed.cc fp8_transposed.h)
 
 set(SOURCES
 data_format_dataset

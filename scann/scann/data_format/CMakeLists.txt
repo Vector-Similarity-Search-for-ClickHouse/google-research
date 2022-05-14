@@ -1,11 +1,29 @@
 add_subdirectory(internal)
 
+# Generated Files
+# ==================================================================
 
+# set(PROTO_SOURCES
+# features.proto
+# )
+
+# protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SOURCES})
+
+# add_library(data_format_features_cc_proto SHARED ${PROTO_SRCS} ${PROTO_HDRS})
+
+# target_link_libraries(data_format_features_cc_proto PUBLIC
+# coscann_v2_restricts_cc_proto
+# proto_restricts_cc_proto
+# ${PROTOBUF_LIBRARIES})
+
+
+# Libraries
+# ==================================================================
 
 add_library(data_format_gfv_conversion INTERFACE)
 
 set(SOURCES
-cc_proto
+data_format_features_cc_proto
 data_format_gfv_properties
 utils_common
 utils_types
@@ -14,13 +32,14 @@ utils_types
 target_link_libraries(data_format_gfv_conversion INTERFACE ${SOURCES})
 
 
-add_library(data_format_datapoint STATIC   datapoint.cc datapoint.h)
+add_library(data_format_datapoint SHARED datapoint.cc datapoint.h)
 
 set(SOURCES
-cc_proto
+data_format_features_cc_proto
 data_format_gfv_conversion
 data_format_gfv_properties
 oss_wrappers_tf_dependency
+proto_hashed_cc_proto
 utils_infinite_one_array
 utils_types
 utils_zip_sort
@@ -32,12 +51,12 @@ target_link_libraries(data_format_datapoint PUBLIC ${SOURCES})
 
 
 
-add_library(data_format_dataset STATIC   dataset.cc dataset.h)
+add_library(data_format_dataset SHARED dataset.cc dataset.h)
 
 set(SOURCES
 data_format_datapoint
 data_format_docid_collection
-cc_proto
+data_format_features_cc_proto
 data_format_gfv_conversion
 data_format_gfv_properties
 data_format_sparse_low_level
@@ -45,6 +64,7 @@ distance_measures_distance_measure_base
 distance_measures_one_to_one_l2_distance
 oss_wrappers_scann_aligned_malloc
 oss_wrappers_tf_dependency
+proto_hashed_cc_proto
 utils_common
 utils_datapoint_utils
 utils_iterators
@@ -76,7 +96,7 @@ absl::strings
 target_link_libraries(data_format_docid_collection_interface INTERFACE ${SOURCES})
 
 
-add_library(data_format_docid_collection STATIC   docid_collection.cc docid_collection.h)
+add_library(data_format_docid_collection SHARED docid_collection.cc docid_collection.h)
 
 set(SOURCES
 data_format_docid_collection_interface
@@ -101,10 +121,10 @@ absl::time
 target_link_libraries(data_format_docid_collection PUBLIC ${SOURCES})
 
 
-add_library(data_format_gfv_properties STATIC   gfv_properties.cc gfv_properties.h)
+add_library(data_format_gfv_properties SHARED gfv_properties.cc gfv_properties.h)
 
 set(SOURCES
-cc_proto
+data_format_features_cc_proto
 oss_wrappers_scann_aligned_malloc
 oss_wrappers_scann_down_cast
 oss_wrappers_tf_dependency

@@ -1,6 +1,6 @@
 add_subdirectory(internal)
 
-add_library(tree_x_hybrid_tree_x_params STATIC   tree_x_params.cc tree_x_params.h )
+add_library(tree_x_hybrid_tree_x_params SHARED tree_x_params.cc tree_x_params.h )
 
 set(SOURCES
 base_search_parameters
@@ -21,7 +21,7 @@ utils_types
 target_link_libraries(tree_x_hybrid_leaf_searcher_optional_parameter_creator INTERFACE ${SOURCES})
  
 
-add_library(tree_x_hybrid_tree_x_hybrid_smmd STATIC   tree_x_hybrid_smmd.cc tree_x_hybrid_smmd.h)
+add_library(tree_x_hybrid_tree_x_hybrid_smmd SHARED tree_x_hybrid_smmd.cc tree_x_hybrid_smmd.h)
 
 set(SOURCES
 tree_x_hybrid_leaf_searcher_optional_parameter_creator
@@ -59,7 +59,7 @@ gtest_main
 target_link_libraries(tree_x_hybrid_tree_x_hybrid_smmd PUBLIC ${SOURCES})
  
 
-add_library(tree_x_hybrid_tree_ah_hybrid_residual STATIC   tree_ah_hybrid_residual.cc tree_ah_hybrid_residual.h )
+add_library(tree_x_hybrid_tree_ah_hybrid_residual SHARED tree_ah_hybrid_residual.cc tree_ah_hybrid_residual.h )
 
 set(SOURCES
 tree_x_hybrid_tree_x_params
@@ -80,7 +80,9 @@ oss_wrappers_tf_dependency
 partitioning_kmeans_tree_like_partitioner
 partitioning_kmeans_tree_partitioner
 projection_projection_factory
-cc_proto
+proto_centers_cc_proto
+proto_distance_measure_cc_proto
+proto_hash_cc_proto
 tree_x_hybrid_internal_batching
 tree_x_hybrid_internal_utils
 trees_kmeans_tree

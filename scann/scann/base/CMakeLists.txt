@@ -1,6 +1,6 @@
 add_subdirectory(internal)
 
-add_library(base_single_machine_factory_scann STATIC   single_machine_factory_scann.cc single_machine_factory_scann.h)
+add_library(base_single_machine_factory_scann SHARED single_machine_factory_scann.cc single_machine_factory_scann.h)
 
 set(SOURCES
 base_reordering_helper_factory
@@ -19,7 +19,10 @@ partitioning_kmeans_tree_like_partitioner
 partitioning_partitioner_factory
 partitioning_partitioner_factory_base
 partitioning_projecting_decorator
-cc_proto
+proto_brute_force_cc_proto
+proto_distance_measure_cc_proto
+proto_exact_reordering_cc_proto
+proto_scann_cc_proto
 tree_x_hybrid_tree_ah_hybrid_residual
 tree_x_hybrid_tree_x_hybrid_smmd
 utils_factory_helpers
@@ -35,7 +38,7 @@ absl::memory
 
 target_link_libraries(base_single_machine_factory_scann PUBLIC ${SOURCES})
 
-add_library(base_reordering_helper_factory STATIC   reordering_helper_factory.cc reordering_helper_factory.h)
+add_library(base_reordering_helper_factory SHARED reordering_helper_factory.cc reordering_helper_factory.h)
 
 set(SOURCES
 base_single_machine_factory_options
@@ -45,7 +48,8 @@ oss_wrappers_scann_aligned_malloc
 oss_wrappers_scann_down_cast
 oss_wrappers_tf_dependency
 projection_projection_factory
-cc_proto
+proto_distance_measure_cc_proto
+proto_exact_reordering_cc_proto
 utils_factory_helpers
 utils_reordering_helper
 utils_types
@@ -56,13 +60,14 @@ absl::flags
 
 target_link_libraries(base_reordering_helper_factory PUBLIC ${SOURCES})
 
-add_library(base_single_machine_factory_options STATIC   single_machine_factory_options.cc single_machine_factory_options.h)
+add_library(base_single_machine_factory_options SHARED single_machine_factory_options.cc single_machine_factory_options.h)
 
 set(SOURCES
 oss_wrappers_scann_aligned_malloc
 oss_wrappers_scann_down_cast
 oss_wrappers_tf_dependency
-cc_proto
+partitioning_partitioner_cc_proto
+proto_centers_cc_proto
 trees_kmeans_tree
 utils_input_data_utils
 utils_types
@@ -74,7 +79,7 @@ absl::flags
 
 target_link_libraries(base_single_machine_factory_options PUBLIC ${SOURCES})
 
-add_library(base_single_machine_base STATIC   single_machine_base.cc single_machine_base.h)
+add_library(base_single_machine_base SHARED single_machine_base.cc single_machine_base.h)
 
 set(SOURCES
 base_search_parameters
@@ -88,7 +93,7 @@ metadata_metadata_getter
 oss_wrappers_scann_aligned_malloc
 oss_wrappers_scann_down_cast
 oss_wrappers_tf_dependency
-cc_proto
+proto_scann_cc_proto
 utils_common
 utils_factory_helpers
 utils_reordering_helper
@@ -104,11 +109,11 @@ absl::strings
 
 target_link_libraries(base_single_machine_base PUBLIC ${SOURCES})
 
-add_library(base_search_parameters STATIC   search_parameters.cc search_parameters.h)
+add_library(base_search_parameters SHARED search_parameters.cc search_parameters.h)
 
 set(SOURCES
 base_restrict_allowlist
-cc_proto
+data_format_features_cc_proto
 oss_wrappers_scann_aligned_malloc
 oss_wrappers_tf_dependency
 utils_types
@@ -116,7 +121,7 @@ utils_types
 
 target_link_libraries(base_search_parameters PUBLIC ${SOURCES})
 
-add_library(base_restrict_allowlist STATIC   restrict_allowlist.cc restrict_allowlist.h)
+add_library(base_restrict_allowlist SHARED restrict_allowlist.cc restrict_allowlist.h)
 
 set(SOURCES
 oss_wrappers_scann_aligned_malloc

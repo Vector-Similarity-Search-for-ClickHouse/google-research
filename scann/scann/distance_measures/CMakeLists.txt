@@ -3,20 +3,20 @@ add_subdirectory(one_to_many)
 add_subdirectory(one_to_one)
 
 
-add_library(distance_measures_distance_measure_base STATIC  
+add_library(distance_measures_distance_measure_base SHARED
 distance_measure_base.cc
 distance_measure_base.h )
 
 set(SOURCES
 data_format_datapoint
-cc_proto
+proto_distance_measure_cc_proto
 utils_types
 )
 
 target_link_libraries(distance_measures_distance_measure_base PUBLIC ${SOURCES})
  
 
-add_library(distance_measures_distance_measures STATIC  
+add_library(distance_measures_distance_measures SHARED
 distance_measure_factory.cc 
 distance_measure_base.h 
 distance_measure_factory.h 
@@ -32,7 +32,7 @@ distance_measures_one_to_one_l1_distance
 distance_measures_one_to_one_l2_distance
 distance_measures_one_to_one_limited_inner_product
 distance_measures_one_to_one_nonzero_intersect_distance
-cc_proto
+proto_distance_measure_cc_proto
 utils_types
 )
 

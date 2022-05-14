@@ -1,18 +1,13 @@
-set(SCANN_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(SCANN_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
-
 cmake_minimum_required(VERSION 3.10)
-project(ProjectName)
+
+project(scann)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 17)
 
 add_compile_options(-mssse3 -msse4)
 
-# abslei 
-add_subdirectory(abseil-cpp)
-
-# gtest 
+#gtest 
 include(FetchContent)
 FetchContent_Declare(
   googletest
@@ -22,79 +17,117 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 # protobuf
-find_package(Protobuf)
+INCLUDE(FindProtobuf)
 
-set(Protobuf_IMPORT_DIRS ${SCANN_SOURCE_DIR})
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/modules")
 
-# eigen3
-set(Eigen3_DIR eigen-3.4.0/cmake)
+# abslei 
+# set(ABSL_PROPAGATE_CXX_STD ON)
+add_subdirectory(abseil-cpp)
+
+
+
+# find packages
+set(Eigen3_DIR /home/nikita/Downloads/eigen-3.4.0/cmake)
+find_package(TensorFlow REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(Protobuf REQUIRED)
 
-# TensorFlow
-# list(APPEND CMAKE_MODULE_PATH "${SCANN_SOURCE_DIR}/modules")
-# find_package(TensorFlow REQUIRED)
-set(TensorFlow_INCLUDE_DIRS ${SCANN_SOURCE_DIR}/tensorflow/tensorflow)
-set(TensorFlow_LIBRARIES ${SCANN_SOURCE_DIR}/tensorflow/old/libtensorflow_cc.so)
+message("${EIGEN3_INCLUDE_DIR}")
+message("${PROTOBUF_INCLUDE_DIRS}")
+
+set(Protobuf_IMPORT_DIRS ${PROJECT_SOURCE_DIR})
 
 
-set(INCLUDE_DIRS 
-${SCANN_SOURCE_DIR}
-${SCANN_BINARY_DIR}
+set(PROJECT_INCLUDE_DIRS 
+${PROJECT_SOURCE_DIR} 
+${PROJECT_BINARY_DIR} 
+${EIGEN3_INCLUDE_DIR} 
+${TensorFlow_INCLUDE_DIRS}  
 ${Protobuf_INCLUDE_DIRS}
-${gtest_SOURCE_DIR}/include
-${gtest_SOURCE_DIR}
+"${gtest_SOURCE_DIR}/include"
+"${gtest_SOURCE_DIR}"
 )
 
-include_directories(${INCLUDE_DIRS})
+include_directories(${PROJECT_INCLUDE_DIRS})
 
-set(PROTO_SOURCES
-${SCANN_SOURCE_DIR}/scann/data_format/features.proto
-${SCANN_SOURCE_DIR}/scann/partitioning/linear_projection_tree.proto
-${SCANN_SOURCE_DIR}/scann/partitioning/partitioner.proto
-${SCANN_SOURCE_DIR}/scann/partitioning/kmeans_tree_partitioner.proto
+message(${PROJECT_BINARY_DIR})
+message(${TensorFlow_LIBRARIES})
 
-${SCANN_SOURCE_DIR}/scann/proto/scann.proto
-${SCANN_SOURCE_DIR}/scann/proto/exact_reordering.proto
-${SCANN_SOURCE_DIR}/scann/proto/brute_force.proto
-${SCANN_SOURCE_DIR}/scann/proto/disjoint_restrict_token.proto
-${SCANN_SOURCE_DIR}/scann/proto/results.proto
-${SCANN_SOURCE_DIR}/scann/proto/crowding.proto
-${SCANN_SOURCE_DIR}/scann/proto/distance_measure.proto
-${SCANN_SOURCE_DIR}/scann/proto/projection.proto
-${SCANN_SOURCE_DIR}/scann/proto/metadata.proto
-${SCANN_SOURCE_DIR}/scann/proto/hash.proto
-${SCANN_SOURCE_DIR}/scann/proto/input_output.proto
-${SCANN_SOURCE_DIR}/scann/proto/restricts.proto
-${SCANN_SOURCE_DIR}/scann/proto/incremental_updates.proto
-${SCANN_SOURCE_DIR}/scann/proto/hashed.proto
-${SCANN_SOURCE_DIR}/scann/proto/partitioning.proto
-${SCANN_SOURCE_DIR}/scann/proto/centers.proto
 
-${SCANN_SOURCE_DIR}/scann/coscann/v2_restricts.proto
-${SCANN_SOURCE_DIR}/scann/trees/kmeans_tree/kmeans_tree.proto
-)
+#-------------------------------------------------------------------------------
 
+file(GLOB_RECURSE PROTO_SOURCES "*.proto")
+
+#message("${PROTO_SOURCES}")
 
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_SOURCES})
+
 add_library(cc_proto ${PROTO_SRCS} ${PROTO_HDRS})
 
-target_include_directories(cc_proto PUBLIC
-${SCANN_BINARY_DIR}
-${SCANN_BINARY_DIR}/scann/proto
-${SCANN_BINARY_DIR}/scann/coscann
-${SCANN_BINARY_DIR}/scann/trees/kmeans_tree
-${SCANN_BINARY_DIR}/scann/partitioning
-${SCANN_BINARY_DIR}/scann/data_format
-${Protobuf_INCLUDE_DIRS}
-)
+add_library(proto_input_output_cc_proto INTERFACE)
+target_link_libraries(proto_input_output_cc_proto INTERFACE cc_proto)
 
-target_link_libraries(cc_proto PUBLIC ${Protobuf_LIBRARIES})
+add_library(data_format_features_cc_proto INTERFACE)
+target_link_libraries(data_format_features_cc_proto INTERFACE cc_proto)
 
-add_subdirectory(scann_api/scann)
+add_library(proto_hashed_cc_proto INTERFACE)
+target_link_libraries(proto_hashed_cc_proto INTERFACE cc_proto)
+
+add_library(partitioning_partitioner_cc_proto INTERFACE)
+target_link_libraries(partitioning_partitioner_cc_proto INTERFACE cc_proto)
+
+add_library(proto_exact_reordering_cc_proto INTERFACE)
+target_link_libraries(proto_exact_reordering_cc_proto INTERFACE cc_proto)
+
+add_library(proto_results_cc_proto INTERFACE)
+target_link_libraries(proto_results_cc_proto INTERFACE cc_proto)
+
+add_library(proto_distance_measure_cc_proto INTERFACE)
+target_link_libraries(proto_distance_measure_cc_proto INTERFACE cc_proto)
+
+add_library(distance_measures INTERFACE)
+target_link_libraries(distance_measures INTERFACE cc_proto)
+
+add_library(proto_hash_cc_proto INTERFACE)
+target_link_libraries(proto_hash_cc_proto INTERFACE cc_proto)
+
+add_library(proto_projection_cc_proto INTERFACE)
+target_link_libraries(proto_projection_cc_proto INTERFACE cc_proto)
+
+add_library(proto_scann_cc_proto INTERFACE)
+target_link_libraries(proto_scann_cc_proto INTERFACE cc_proto)
+
+add_library(proto_brute_force_cc_proto INTERFACE)
+target_link_libraries(proto_brute_force_cc_proto INTERFACE cc_proto)
+
+add_library(proto_incremental_updates_cc_proto INTERFACE)
+target_link_libraries(proto_incremental_updates_cc_proto INTERFACE cc_proto)
+
+add_library(proto_metadata_cc_proto INTERFACE)
+target_link_libraries(proto_metadata_cc_proto INTERFACE cc_proto)
+
+add_library(proto_partitioning_cc_proto INTERFACE)
+target_link_libraries(proto_partitioning_cc_proto INTERFACE cc_proto)
+
+add_library(proto_restricts_cc_proto INTERFACE)
+target_link_libraries(proto_restricts_cc_proto INTERFACE cc_proto)
+
+add_library(proto_centers_cc_proto INTERFACE)
+target_link_libraries(proto_centers_cc_proto INTERFACE cc_proto)
+
+add_library(tree_kmeans_tree_kmeans_tree_cc_proto INTERFACE)
+target_link_libraries(tree_kmeans_tree_kmeans_tree_cc_proto INTERFACE cc_proto)
+
+add_library(partitioning_kmeans_tree_partitioner_cc_proto INTERFACE)
+target_link_libraries(partitioning_kmeans_tree_partitioner_cc_proto INTERFACE cc_proto)
+
+add_library(proto_crowding_cc_proto INTERFACE)
+target_link_libraries(proto_crowding_cc_proto INTERFACE cc_proto)
+
+#-------------------------------------------------------------------------------
+
 add_subdirectory(scann)
 
-set(SCANN_INCLUDE_DIRS ${SCANN_SOURCE_DIR}/scann_api)
-
-add_executable(Main main.cpp)
-target_link_libraries(Main scann_interface)
-target_include_directories(Main PUBLIC ${SCANN_INCLUDE_DIRS})
+add_executable(mian main.cpp)
+target_link_libraries(mian PUBLIC scann_ops_cc_scann ${TensorFlow_LIBRARIES} ${PROTOBUF_LIBRARIES}) 
