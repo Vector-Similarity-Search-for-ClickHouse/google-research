@@ -18,7 +18,10 @@ syntax = "proto2";
 
 package research_scann;
 
-import "scann/proto/exact_reordering.proto";
+// import "scann/proto/exact_reordering.proto";
+
+import "exact_reordering.proto";
+
 
 message BruteForceConfig {
   optional bool scalar_quantized = 1 [default = false, deprecated = true];

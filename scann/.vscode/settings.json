@@ -1,0 +1,5 @@
+{
+    "clang-format.language.cpp.style": "",
+    "C_Cpp.clang_format_fallbackStyle": "Google",
+    "C_Cpp.clang_format_style": "Google"
+}

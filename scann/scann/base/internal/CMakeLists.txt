@@ -1,0 +1,16 @@
+add_library(base_internal_single_machine_factory_impl INTERFACE)
+
+set(SOURCES 
+base_reordering_helper_factory
+base_single_machine_base
+base_single_machine_factory_options
+data_format_dataset
+oss_wrappers_tf_dependency
+cc_proto
+utils_factory_helpers
+utils_scann_config_utils
+)
+
+add_dependencies(base_internal_single_machine_factory_impl ${SOURCES})
+
+target_link_libraries(base_internal_single_machine_factory_impl INTERFACE ${SOURCES})
